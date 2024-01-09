@@ -17,6 +17,9 @@ class Category
         $this->name = $name;
         $this->description = $description;
         $this->createAt = $createAt;
+        $db = $this->connection();
+        $this->db = $db;
+
     }
 
     public function getId(){
