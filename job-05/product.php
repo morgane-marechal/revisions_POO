@@ -15,10 +15,11 @@ class Product extends Connect{
     private ?int $quantity;
     private ?string $createAt;
     private ?string $updateAt;
+    private ?int $id_category;
 
     private $db = "NULL";
 
-    function __construct($id = null, $name = null, $photo = null, $price = null, $description = null, $quantity = null, $createAt = null, $updateAt = null) {
+    function __construct($id = null, $name = null, $photo = null, $price = null, $description = null, $quantity = null, $createAt = null, $updateAt = null, $id_category = null) {
         $this->id=$id;
         $this->name = $name;
         $this->photo = $photo;
@@ -27,6 +28,7 @@ class Product extends Connect{
         $this->quantity = $quantity;
         $this->createAt = $createAt;
         $this->updateAt = $updateAt;
+        $this->id_category = $id_category;
         $db = $this->connection();
                 $this->db = $db;
     }
@@ -95,10 +97,18 @@ class Product extends Connect{
         return $this->updateAt = $updateAt;
     }
 
+    public function getIdCategory(){
+        return $this->id_category;
+    }
+
+    public function setIdCategory($id_category){
+        return $this->id_category = $id_category;
+    }
+
     //get product by id
 
     public function getProductById(int $productId): array {
-        $productCategory = [];
+        $productData = [];
 
         try {
 
@@ -107,8 +117,9 @@ class Product extends Connect{
 
             $result = $pdo_stmt->fetch();
 
-            // update the product Category
-            $productCategory = $result;
+            // update the product data
+            $this->id = $productId;
+            $productData = $result;
 
         } catch (PDOException $e) {
           // TODO: handle the exception
@@ -116,11 +127,52 @@ class Product extends Connect{
           die();
         }
 
-        return $productCategory;
+        return $productData;
+    }
+
+
+    function getCategory(){
+        $productData = [];
+
+        try {
+
+            $query = "SELECT product.category_Id FROM `product` WHERE product.id = $this->id";
+            $pdo_stmt = $this->db->query($query, PDO::FETCH_ASSOC);
+            $result = $pdo_stmt->fetch();
+            // update the product data
+            $productData = $result;
+
+        } catch (PDOException $e) {
+          // TODO: handle the exception
+          echo $e->getMessage();
+          die();
+        }
+
+        return $productData;
+
+
     }
 
 
 }
+
+// // //test pour voir si les methodes fonctionnent
+// $product = new Product();
+// $product7 = $product->getProductById(7);
+// // var_dump($product7);
+
+// // echo $product7['category_id']."<br>";
+
+// $cat7 = $product->getCategory();
+// var_dump($cat7);
+
+
+
+
+
+
+
+// var_dump($newProductSeven);
 
 
 
