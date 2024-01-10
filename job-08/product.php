@@ -180,15 +180,43 @@ class Product extends Connect{
         }
         
     }
+
+    public function findAll() {
+        $productData = [];
+
+        try {
+
+            $query = "SELECT * FROM `product`";
+            $pdo_stmt = $this->db->query($query, PDO::FETCH_ASSOC);
+
+            $result = $pdo_stmt->fetchAll();
+
+            foreach ($result as $instanceProduct) {
+                // $instanceProduct['name'];
+                $product = new Product($instanceProduct['id'],$instanceProduct['name'], $instanceProduct['photos'], $instanceProduct['price'],
+                $instanceProduct['description'], $instanceProduct['quantity'], $instanceProduct['createAt'],$instanceProduct['updateAt'],
+                $instanceProduct['category_id']);
+                array_push($productData, $product);
+              }
+        } catch (PDOException $e) {
+          // TODO: handle the exception
+          echo $e->getMessage();
+          die();
+        }
+        return $productData;
+    }
+
+    public function create(){
+        $query = "INSERT INTO `product` (name, photos, price, description, quantity, createAt, updateAt, category_id) VALUES ($this->name, $this->photos, $this->price, $this->description, $this->quantity, $this->createAt, $this->updateAt, $this->category_id)";
+        $pdo_stmt = $this->db->query($query, PDO::FETCH_ASSOC);
+
+        $result = $pdo_stmt->fetch();
+
+    }
 }
 
 
 
-
-// // //test pour voir si les methodes fonctionnent
-// $product = new Product();
-// $product7 = $product->findOneById(7);
-// var_dump($product7);
 
 
 
