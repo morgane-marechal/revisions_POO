@@ -9,7 +9,7 @@ class Product extends Connect{
      */
     private  ?int $id;
     private ?string $name;
-    private ?string $photo;
+    private ?array $photo;
     private ?int $price;
     private ?string $description;
     private ?int $quantity;

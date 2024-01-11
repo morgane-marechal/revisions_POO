@@ -6,11 +6,11 @@ class Category
     /**
      * @var
      */
-    public $id;
-    public $name;
-public $description;
-public $createAt;
-public $updateAt ="";
+    private $id;
+    private $name;
+private $description;
+private $createAt;
+private $updateAt ="";
 
     function __construct($id, $name, $description, $createAt) {
         $this->id=$id;

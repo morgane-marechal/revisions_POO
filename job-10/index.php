@@ -7,11 +7,15 @@ require('product.php');
 $newDate = date("Y-m-d H:i:s"); 
 
 
-$product = new Product(NULL,"UpdateDell1", "img1.png", 999, "lorem ipsum Tamere", 2, $newDate, NULL, 1 );
+$product = new Product(NULL,"UpdateDell2", ['img.png', 'image-oridnateur'], 999, "lorem ipsum Tamere", 2, $newDate, NULL, 1 );
+$photos = $product->getPhoto();
+$name = $product->getName();
 $product->create();
+
 $product->setQuantity(666);
 $product->update();
-var_dump($product);
+var_dump($photos);
+var_dump($name);
 
 
 ?>

@@ -7,7 +7,7 @@ require('product.php');
 $newDate = date("Y-m-d H:i:s"); 
 
 
-$product = new Product(NULL,"Super Asus 300", "img1.png", 999, "lorem ipsum Tamere", 2, $newDate, NULL, 1 );
+$product = new Product(NULL,"Super Asus 300", ["img1.png"], 999, "lorem ipsum Tamere", 2, $newDate, NULL, 1 );
 $productCreate=$product->create();
 var_dump($productCreate);
 

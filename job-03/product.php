@@ -6,14 +6,14 @@ class Product
     /**
      * @var
      */
-    public $id;
-    public $name;
-public $photo;
-public $price;
-public $description;
-public $quantity;
-public $createAt;
-public $updateAt ="";
+    private $id;
+    private $name;
+    private $photo;
+    private $price;
+    private $description;
+    private $quantity;
+    private $createAt;
+    private $updateAt ="";
 
     function __construct($id = null, $name = null, $photo = null, $price = null, $description = null, $quantity = null, $createAt = null, $updateAt = null) {
         $this->id=$id;

@@ -9,7 +9,7 @@ class Product extends Connect{
      */
     private  ?int $id;
     private ?string $name;
-    private ?string $photo;
+    private ?array $photo;
     private ?int $price;
     private ?string $description;
     private ?int $quantity;
@@ -207,11 +207,13 @@ class Product extends Connect{
     }
 
     public function create(){
-        $query = "INSERT INTO `product` (name, photos, price, description, quantity, createAt, updateAt, category_id) VALUES (:name, :photos, :price, :description, :quantity, :createAt, :updateAt, :category_id)";
+        $photos = json_encode($this->photo);
+
+        $query = "INSERT INTO `product` (name, photos, price, description, quantity, createAt, updateAt, category_id) VALUES (:name, :photo, :price, :description, :quantity, :createAt, :updateAt, :category_id)";
         $sql_exe = $this->db->prepare($query);
         $sql_exe->execute([
             'name' => htmlspecialchars($this->name),
-            'photos' => htmlspecialchars($this->photo),
+         'photo'  => $photos,
             'description' => htmlspecialchars($this->description),
             'price' => htmlspecialchars($this->price),
             'quantity' => htmlspecialchars($this->quantity),
@@ -228,14 +230,25 @@ class Product extends Connect{
             return $this;
         }else{
             return false;
-        }
-    
+        } 
+    }
 
+    public function update(){
+        $query = "UPDATE `product` SET name = :name, photos = :photo, price = :price, description = :description, quantity= :quantity, createAt = :createAt, updateAt = :updateAt, category_id = :category_id WHERE id = :id";
+        $sql_exe = $this->db->prepare($query);
+        $sql_exe->execute([
+            'id' => $this->id,
+            'name' => htmlspecialchars($this->name),
+            'photo' => $this->photo,
+            'description' => htmlspecialchars($this->description),
+            'price' => htmlspecialchars($this->price),
+            'quantity' => htmlspecialchars($this->quantity),
+            'category_id' => htmlspecialchars($this->id_category),
+            'createAt' => $this->createAt,
+            'updateAt' => $this->updateAt
+        ]); 
 
-
-
-
-        
+        return $this;
 
     }
 }

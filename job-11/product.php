@@ -9,12 +9,12 @@ class Product extends Connect{
      */
     private  ?int $id;
     private ?string $name;
-    private ?array $photo;
+    private ?string $photo;
     private ?int $price;
     private ?string $description;
     private ?int $quantity;
-    private ?string $createAt;
-    private ?string $updateAt;
+    private  $createAt;
+    private  $updateAt;
     private ?int $id_category;
 
     private $db = "NULL";
@@ -193,7 +193,7 @@ class Product extends Connect{
 
             foreach ($result as $instanceProduct) {
                 // $instanceProduct['name'];
-                $product = new Product($instanceProduct['id'],$instanceProduct['name'], [$instanceProduct['photos']], $instanceProduct['price'],
+                $product = new Product($instanceProduct['id'],$instanceProduct['name'], $instanceProduct['photos'], $instanceProduct['price'],
                 $instanceProduct['description'], $instanceProduct['quantity'], $instanceProduct['createAt'],$instanceProduct['updateAt'],
                 $instanceProduct['category_id']);
                 array_push($productData, $product);
@@ -207,10 +207,46 @@ class Product extends Connect{
     }
 
     public function create(){
-        $query = "INSERT INTO `product` (name, photos, price, description, quantity, createAt, updateAt, category_id) VALUES ($this->name, $this->photos, $this->price, $this->description, $this->quantity, $this->createAt, $this->updateAt, $this->category_id)";
-        $pdo_stmt = $this->db->query($query, PDO::FETCH_ASSOC);
+        $query = "INSERT INTO `product` (name, photos, price, description, quantity, createAt, updateAt, category_id) VALUES (:name, :photos, :price, :description, :quantity, :createAt, :updateAt, :category_id)";
+        $sql_exe = $this->db->prepare($query);
+        $sql_exe->execute([
+            'name' => htmlspecialchars($this->name),
+            'photos' => htmlspecialchars($this->photo),
+            'description' => htmlspecialchars($this->description),
+            'price' => htmlspecialchars($this->price),
+            'quantity' => htmlspecialchars($this->quantity),
+            'category_id' => htmlspecialchars($this->id_category),
+            'createAt' => $this->createAt,
+            'updateAt' => $this->updateAt
+        ]); 
 
-        $result = $pdo_stmt->fetch();
+        if ($sql_exe) {
+            $queryLastId = "SELECT LAST_INSERT_ID() FROM `product`";
+            $pdo_stmt = $this->db->query($queryLastId, PDO::FETCH_ASSOC);
+            $result = $pdo_stmt->fetch();
+            $this->id=$result['LAST_INSERT_ID()'];
+            return $this;
+        }else{
+            return false;
+        } 
+    }
+
+    public function update(){
+        $query = "UPDATE `product` SET name = :name, photos = :photo, price = :price, description = :description, quantity= :quantity, createAt = :createAt, updateAt = :updateAt, category_id = :category_id WHERE id = :id";
+        $sql_exe = $this->db->prepare($query);
+        $sql_exe->execute([
+            'id' => $this->id,
+            'name' => htmlspecialchars($this->name),
+            'photo' => htmlspecialchars($this->photo),
+            'description' => htmlspecialchars($this->description),
+            'price' => htmlspecialchars($this->price),
+            'quantity' => htmlspecialchars($this->quantity),
+            'category_id' => htmlspecialchars($this->id_category),
+            'createAt' => $this->createAt,
+            'updateAt' => $this->updateAt
+        ]); 
+
+        return $this;
 
     }
 }
